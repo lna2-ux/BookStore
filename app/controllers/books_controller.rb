@@ -1,20 +1,12 @@
 class BooksController < ApplicationController
   def index
-    @books = Book.includes(:author)
-    
-    # Simple Search (Feature 4.1)
-    if params[:search].present?
-      @books = @books.where("title LIKE ?", "%#{params[:search]}%")
+    if params[:query].present?
+      # Filters books by title if a search query is entered, with pagination
+      @books = Book.where("title LIKE ?", "%#{params[:query]}%").page(params[:page])
+    else
+      # Loads all books with pagination if no search query is present
+      @books = Book.page(params[:page])
     end
-
-    # Hierarchical Filter by Author (Feature 4.2)
-    if params[:author_id].present?
-      @books = @books.where(author_id: params[:author_id])
-    end
-
-    # Pagination (Feature 3.5)
-    @books = @books.page(params[:page]).per(20)
-    @authors = Author.order(:name)
   end
 
   def show

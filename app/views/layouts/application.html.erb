@@ -7,17 +7,30 @@
     <%= csp_meta_tag %>
 
     <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <!-- Dark Navbar matching your reference -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4 shadow-sm">
-      <div class="container-fluid">
-        <%= link_to "BookStore", root_path, class: "navbar-brand fw-bold" %>
+  <body class="bg-light">
+    <!-- Top Utility & Contact Bar -->
+    <div class="bg-dark text-white py-1 px-3 small d-none d-md-block">
+      <div class="container d-flex justify-content-between align-items-center">
+        <div>
+          <span class="me-3">Winnipeg Toll-Free: 1-800-561-1833</span>
+          <span>SK Toll-Free: 1-877-506-7456</span>
+        </div>
+        <div>
+          <span class="text-warning text-decoration-none">Contact & Locations</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary shadow-sm">
+      <div class="container">
+        <%= link_to "BookStore", root_path, class: "navbar-brand fw-bold fs-4 text-warning" %>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
@@ -26,27 +39,55 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <%= link_to "Books", books_path, class: "nav-link" %>
+              <%= link_to "Books", books_path, class: "nav-link px-3 active" %>
             </li>
             <li class="nav-item">
-              <%= link_to "Authors", authors_path, class: "nav-link" %>
+              <%= link_to "Authors", authors_path, class: "nav-link px-3" %>
             </li>
             <li class="nav-item">
-              <%= link_to "About", about_path, class: "nav-link" %>
+              <%= link_to "About", about_path, class: "nav-link px-3" %>
             </li>
           </ul>
 
-          <!-- Search Form on the right -->
-          <%= form_with url: books_path, method: :get, local: true, class: "d-flex" do |f| %>
-            <%= f.text_field :search, value: params[:search], placeholder: "Book Search", class: "form-control me-2", style: "width: 220px;" %>
-            <%= f.submit "Search", class: "btn btn-outline-success" %>
+          <!-- Search Form -->
+          <%= form_with url: books_path, method: :get, local: true, class: "d-flex gap-2" do |form| %>
+            <%= form.text_field :query, value: params[:query], placeholder: "Book Search...", class: "form-control form-control-sm", style: "width: 200px;" %>
+            <%= form.submit "Search", class: "btn btn-outline-warning btn-sm" %>
           <% end %>
         </div>
       </div>
     </nav>
 
-    <main class="container">
+    <!-- Promotional Banner -->
+    <div class="container my-3">
+      <div class="row g-2 align-items-center bg-white border rounded shadow-sm p-2 text-center text-md-start">
+        <div class="col-md-7 border-end-md">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+            <div class="text-success fw-bold fs-5 text-uppercase">Free Shipping</div>
+            <div class="small text-muted border-start ps-3">
+              & Local Delivery in Winnipeg <br>
+              <span class="text-danger fw-semibold" style="font-size: 11px;">CONDITIONS APPLY » LEARN MORE »</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2">
+            <div class="text-end">
+              <span class="fw-bold text-danger d-block small text-uppercase">Reward Yourself</span>
+              <span class="fw-bold text-dark" style="font-size: 13px;">Become a Member</span>
+            </div>
+            <a href="#" class="btn btn-danger btn-sm fw-bold px-3">CLICK HERE »</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Yield -->
+    <main class="container mb-5">
       <%= yield %>
     </main>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
