@@ -1,4 +1,15 @@
 <h1>All Books</h1>
+
+<!-- Search and Filter Form (Features 4.1 & 4.2) -->
+<%= form_with url: books_path, method: :get, local: true, style: "margin-bottom: 20px;" do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search book title..." %>
+  
+  <%= select_tag :author_id, options_from_collection_for_select(@authors, :id, :name, params[:author_id]), include_blank: "All Authors", style: "margin-left: 10px;" %>
+  
+  <%= submit_tag "Filter", style: "margin-left: 10px;" %>
+  <%= link_to "Reset", books_path, style: "margin-left: 10px;" %>
+<% end %>
+
 <ul>
   <% @books.each do |book| %>
     <li>
@@ -7,3 +18,8 @@
     </li>
   <% end %>
 </ul>
+
+<!-- Pagination Links (Feature 3.5) -->
+<div style="margin-top: 20px;">
+  <%= paginate @books %>
+</div>
