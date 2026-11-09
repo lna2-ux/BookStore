@@ -1,0 +1,9 @@
+<h1>All Books</h1>
+<ul>
+  <% @books.each do |book| %>
+    <li>
+      <%= link_to book.title, book_path(book) %> by 
+      <%= link_to book.author.name, author_path(book.author) %> ($<%= book.price %>)
+    </li>
+  <% end %>
+</ul>

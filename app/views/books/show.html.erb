@@ -1,0 +1,5 @@
+<h1><%= @book.title %></h1>
+<p><strong>Author:</strong> <%= link_to @book.author.name, author_path(@book.author) %></p>
+<p><strong>Published Year:</strong> <%= @book.published_year %></p>
+<p><strong>Price:</strong> $<%= @book.price %></p>
+<p><%= link_to "Back to Books", books_path %></p>
