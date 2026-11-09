@@ -1,7 +1,7 @@
 <div class="container py-4">
   <h1 class="mb-4">All Authors</h1>
 
-  <div class="list-group shadow-sm">
+  <div class="list-group shadow-sm mb-4">
     <% @authors.each do |author| %>
       <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
         <div>
@@ -13,5 +13,10 @@
         <span class="badge bg-secondary rounded-pill"><%= author.books.count %> books</span>
       </div>
     <% end %>
+  </div>
+
+  <!-- Pagination links -->
+  <div class="d-flex justify-content-center">
+    <%= paginate @authors %>
   </div>
 </div>
