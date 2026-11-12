@@ -1,0 +1,87 @@
+<div class="container py-5">
+  <!-- Page Header -->
+  <div class="mb-5 pb-3 border-bottom">
+    <h1 class="fw-bold text-dark mb-2">About the BookStore Project</h1>
+    <p class="text-muted lead mb-0">
+      This application is a full-featured Book & Author Store built with Ruby on Rails, designed to manage catalog data efficiently using live external APIs.
+    </p>
+  </div>
+
+  <!-- Data Source Section -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <h3 class="fw-bold text-dark mb-3">Data Source</h3>
+    <p class="text-secondary mb-0">
+      All book and author records are fetched dynamically from the public 
+      <a href="https://openlibrary.org" target="_blank" class="text-decoration-none fw-semibold text-primary">Open Library API</a>, 
+      requiring no authentication keys and ensuring a rich dataset of real-world literature.
+    </p>
+  </div>
+
+  <!-- Database Statistics -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+    <h3 class="fw-bold text-dark mb-3">Database Statistics</h3>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
+          <span class="fw-semibold text-secondary">Total Authors</span>
+          <span class="badge bg-primary fs-6 px-3 py-2"><%= @total_authors %></span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
+          <span class="fw-semibold text-secondary">Total Books</span>
+          <span class="badge bg-success fs-6 px-3 py-2"><%= @total_books %></span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
+          <span class="fw-semibold text-secondary">Total Categories</span>
+          <span class="badge bg-dark fs-6 px-3 py-2"><%= @total_categories %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entity Relationship Diagram (ERD) Section -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+    <h3 class="fw-bold text-dark mb-2">Entity Relationship Diagram (ERD)</h3>
+    <p class="text-muted mb-4">
+      The database architecture follows a clean relational model where an <span class="text-danger fw-semibold">Author</span> has many <span class="text-danger fw-semibold">Books</span>, a <span class="text-danger fw-semibold">Category</span> has many <span class="text-danger fw-semibold">Books</span>, and each <span class="text-danger fw-semibold">Book</span> belongs to an Author and a Category.
+    </p>
+
+    <!-- Professional Graphical ERD Diagram using Mermaid.js -->
+    <div class="p-4 bg-light rounded-4 border d-flex justify-content-center overflow-auto">
+<pre class="mermaid m-0">
+erDiagram
+    AUTHOR ||--o{ BOOK : writes
+    CATEGORY ||--o{ BOOK : classifies
+    
+    AUTHOR {
+        integer id PK
+        string name
+        text bio
+    }
+
+    CATEGORY {
+        integer id PK
+        string name
+    }
+
+    BOOK {
+        integer id PK
+        string title
+        decimal price
+        integer published_year
+        integer author_id FK
+        integer category_id FK
+    }
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Include Mermaid.js for automated rendering of professional ERD diagrams -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'default' });
+</script>

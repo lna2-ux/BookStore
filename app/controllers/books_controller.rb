@@ -1,12 +1,23 @@
 class BooksController < ApplicationController
   def index
+    # Safely fetch categories if the Category model exists
+    @categories = defined?(Category) ? Category.all : []
+
+    # Eager load author and category for better performance
+    @books = Book.includes(:author, :category).all
+
+    # Filter by search query if present
     if params[:query].present?
-      # Filters books by title if a search query is entered, with pagination
-      @books = Book.where("title LIKE ?", "%#{params[:query]}%").page(params[:page])
-    else
-      # Loads all books with pagination if no search query is present
-      @books = Book.page(params[:page])
+      @books = @books.where("title LIKE ?", "%#{params[:query]}%")
     end
+
+    # Filter by category if selected
+    if params[:category_id].present?
+      @books = @books.where(category_id: params[:category_id])
+    end
+
+    # Paginate results
+    @books = @books.page(params[:page]).per(10)
   end
 
   def show

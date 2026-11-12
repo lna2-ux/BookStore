@@ -1,85 +1,72 @@
-<div class="container py-4">
-  <!-- Top Promotional Feature Banners (2-Column) -->
-  <div class="row g-4 mb-5">
-    <!-- Boxed Sets Feature -->
-    <div class="col-md-6">
-      <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white h-100">
-        <div class="mb-3" style="min-height: 160px; display: flex; align-items: center; justify-content: center;">
-          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=300&q=80" alt="Boxed Sets" class="img-fluid rounded shadow-sm" style="max-height: 150px; object-fit: cover;">
-        </div>
-        <h3 class="fw-bold text-dark fs-4">Oh-So-Giftable Boxed Sets</h3>
-        <p class="text-secondary small mb-3">The gift that keeps the pages turning. Find a boxed set they'll love.</p>
-        <div>
-          <%= link_to "Shop Now »", books_path, class: "text-danger fw-bold text-decoration-none" %>
-        </div>
+<div class="container py-5">
+  <!-- Page Header Banner Area -->
+  <div class="text-center bg-light py-5 mb-5 rounded-4 shadow-sm">
+    <h1 class="fw-bold text-dark display-5 mb-2">Authors</h1>
+    <p class="text-muted mb-0">
+      <span class="text-secondary">Home</span> <span class="mx-2">&gt;</span> <span class="text-dark fw-semibold">Authors</span>
+    </p>
+  </div>
+
+  <div class="row">
+    <!-- Main Authors Grid (3 columns of circular avatars) -->
+    <div class="col-lg-9">
+      <div class="row g-4">
+        <% @authors.each_with_index do |author, index| %>
+          <div class="col-md-4 text-center">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white hover-shadow transition">
+              <div class="d-flex justify-content-center mb-3">
+                <!-- Circular Author Portrait Image -->
+                <img src="https://picsum.photos/seed/author<%= author.id %>-<%= index %>/200/200" 
+                     class="rounded-circle shadow-sm border border-3 border-light bg-secondary object-fit-cover" 
+                     alt="<%= author.name %>" 
+                     style="width: 120px; height: 120px;">
+              </div>
+              <h5 class="fw-bold text-dark mb-1">
+                <%= link_to author.name, author_path(author), class: "text-decoration-none text-dark stretched-link" %>
+              </h5>
+              <p class="text-muted small mb-0">
+                <%= author.books.count %> <%= author.books.count == 1 ? 'book' : 'books' %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center mt-5">
+        <%= paginate @authors if respond_to?(:paginate) %>
       </div>
     </div>
 
-    <!-- Sprayed Edge Feature -->
-    <div class="col-md-6">
-      <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white h-100">
-        <div class="mb-3" style="min-height: 160px; display: flex; align-items: center; justify-content: center;">
-          <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=300&q=80" alt="Sprayed Edge Books" class="img-fluid rounded shadow-sm" style="max-height: 150px; object-fit: cover;">
-        </div>
-        <h3 class="fw-bold text-dark fs-4">Sprayed Edge Books? Yes, Please</h3>
-        <p class="text-secondary small mb-3">These books deserve to be shown off on your bookshelf, edges out.</p>
-        <div>
-          <%= link_to "Shop Now »", books_path, class: "text-danger fw-bold text-decoration-none" %>
-        </div>
+    <!-- Right Sidebar (Search and Categories) -->
+    <div class="col-lg-3 mt-4 mt-lg-0">
+      <!-- Search Box -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <h6 class="fw-bold text-dark mb-3">Search</h6>
+        <form action="<%= authors_path %>" method="get">
+          <div class="input-group">
+            <input type="text" name="query" class="form-control form-control-sm" placeholder="Enter Keyword..." value="<%= params[:query] %>">
+            <button class="btn btn-outline-secondary btn-sm" type="submit">🔍</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Categories Widget -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h6 class="fw-bold text-dark mb-3">Categories</h6>
+        <ul class="list-unstyled mb-0 small text-secondary">
+          <% if defined?(@categories) && @categories.present? %>
+            <% @categories.each do |cat| %>
+              <li class="d-flex justify-content-between py-1 border-bottom">
+                <%= link_to cat.name, books_path(category_id: cat.id), class: "text-decoration-none text-secondary" %>
+                <span class="text-muted">(<%= Book.where(category_id: cat.id).count %>)</span>
+              </li>
+            <% end %>
+          <% else %>
+            <li class="py-1 text-muted">No categories available</li>
+          <% end %>
+        </ul>
       </div>
     </div>
-  </div>
-
-  <!-- Recommended Reads Section -->
-  <div class="mb-4 text-center">
-    <h2 class="fw-bold text-dark mb-1">Recommended Reads</h2>
-    <div class="mx-auto bg-dark rounded" style="width: 50px; height: 3px;"></div>
-  </div>
-
-  <!-- Book Cards Grid -->
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
-    <% if defined?(@recommended_books) && @recommended_books.present? %>
-      <% @recommended_books.each do |book| %>
-        <div class="col">
-          <div class="card h-100 border-0 shadow-sm rounded-3 p-3 text-center">
-            <div class="mb-2">
-              <img src="https://covers.openlibrary.org/b/id/<%= 100000 + book.id.to_i %>-M.jpg" 
-                   class="rounded shadow-sm img-fluid" 
-                   alt="<%= book.title %>" 
-                   style="height: 180px; width: 120px; object-fit: cover;"
-                   onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=120&q=80';">
-            </div>
-            <div class="card-body p-0 d-flex flex-column justify-content-between">
-              <div>
-                <h6 class="fw-semibold text-dark text-truncate mb-1"><%= link_to book.title, book_path(book), class: "text-decoration-none text-dark" %></h6>
-                <p class="text-muted small mb-2"><%= book.author.present? ? book.author.name : "Unknown Author" %></p>
-              </div>
-              <div>
-                <span class="text-danger fw-bold">$<%= number_with_precision(book.price, precision: 2) %></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% else %>
-      <!-- Fallback static showcase cards if @recommended_books isn't defined in controller -->
-      <% 5.times do |i| %>
-        <div class="col">
-          <div class="card h-100 border-0 shadow-sm rounded-3 p-3 text-center bg-white">
-            <div class="mb-2">
-              <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=120&q=80" 
-                   class="rounded shadow-sm img-fluid mx-auto" 
-                   alt="Book" 
-                   style="height: 180px; width: 120px; object-fit: cover;">
-            </div>
-            <div class="card-body p-0">
-              <h6 class="fw-semibold text-dark text-truncate mb-1">Featured Title <%= i + 1 %></h6>
-              <p class="text-muted small mb-2">Bestselling Author</p>
-              <span class="text-danger fw-bold">$7.99</span>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
   </div>
 </div>

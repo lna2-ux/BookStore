@@ -1,26 +1,69 @@
-<div class="container py-4">
-  <h1 class="mb-2"><%= @author.name %></h1>
-  <p class="lead text-muted"><%= @author.bio %></p>
+<div class="container py-5">
+  <!-- Back Button & Breadcrumbs -->
+  <div class="mb-4">
+    <%= link_to "← Back to Authors Directory", authors_path, class: "text-decoration-none text-muted fw-semibold small" %>
+  </div>
 
-  <hr class="my-4">
+  <!-- Author Header Profile Card -->
+  <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-5">
+    <div class="row align-items-center">
+      <div class="col-md-auto text-center mb-3 mb-md-0">
+        <div class="bg-dark text-warning rounded-circle d-flex align-items-center justify-content-center fw-bold display-5 mx-auto shadow-sm" style="width: 90px; height: 90px;">
+          <%= @author.name.first.upcase %>
+        </div>
+      </div>
+      <div class="col-md text-center text-md-start">
+        <h1 class="fw-bold text-dark mb-1"><%= @author.name %></h1>
+        <p class="text-muted mb-2">Author Profile & Published Works</p>
+        <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2">
+          <%= pluralize(@author.books.count, 'Book') %> in Store Catalog
+        </span>
+      </div>
+    </div>
+  </div>
 
-  <h3 class="mb-3">Books by <%= @author.name %></h3>
-  
-  <% if @author.books.any? %>
-    <div class="list-group mb-4 shadow-sm">
-      <% @author.books.each do |book| %>
-        <div class="list-group-item d-flex justify-content-between align-items-center p-3">
-          <div>
-            <%= link_to book.title, book_path(book), class: "fw-bold text-decoration-none text-primary" %>
-            <small class="text-muted ms-2">(Published: <%= book.published_year %>)</small>
+  <!-- Author's Books Section -->
+  <div class="mb-4">
+    <h3 class="fw-bold text-dark mb-1">Books by <%= @author.name %></h3>
+    <p class="text-muted small">Browse all titles written by this author available for purchase.</p>
+    <div class="bg-dark rounded mb-4" style="width: 40px; height: 3px;"></div>
+  </div>
+
+  <!-- Books Grid -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <% if @books.any? %>
+      <% @books.each do |book| %>
+        <div class="col">
+          <div class="card h-100 border-0 shadow-sm rounded-4 p-3 text-center bg-white d-flex flex-column justify-content-between">
+            <div>
+              <div class="mb-3">
+                <img src="https://covers.openlibrary.org/b/id/<%= 100000 + book.id.to_i %>-M.jpg" 
+                     class="rounded shadow-sm img-fluid" 
+                     alt="<%= book.title %>" 
+                     style="height: 180px; width: 120px; object-fit: cover;"
+                     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=120&q=80';">
+              </div>
+              <h6 class="fw-semibold text-dark text-truncate mb-1">
+                <%= link_to book.title, book_path(book), class: "text-decoration-none text-dark stretched-link" %>
+              </h6>
+              <p class="text-muted small mb-2"><%= @author.name %></p>
+            </div>
+            
+            <div class="pt-2 border-top mt-2">
+              <span class="text-danger fw-bold fs-6">$<%= number_with_precision(book.price, precision: 2) %></span>
+            </div>
           </div>
-          <span class="text-success fw-bold">$<%= book.price %></span>
         </div>
       <% end %>
-    </div>
-  <% else %>
-    <p class="text-muted">No books currently listed for this author.</p>
-  <% end %>
+    <% else %>
+      <div class="col-12 text-center py-5">
+        <p class="text-muted fst-italic">No books are currently listed for this author.</p>
+      </div>
+    <% end %>
+  </div>
 
-  <%= link_to "← Back to Authors", authors_path, class: "btn btn-outline-secondary mt-3" %>
+  <!-- Pagination for Author's Books -->
+  <div class="d-flex justify-content-center mt-5">
+    <%= paginate @books if respond_to?(:paginate) %>
+  </div>
 </div>

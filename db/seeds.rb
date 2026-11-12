@@ -5,18 +5,40 @@
 require 'net/http'
 require 'json'
 
-# Clear existing records to start fresh
+# Clear existing records to start fresh (Order matters due to foreign keys)
 Book.destroy_all
+Category.destroy_all
 Author.destroy_all
+
+puts "Creating categories..."
+
+# Define category mappings for queries
+category_mapping = {
+  "programming" => "Programming & Tech",
+  "fiction" => "Fiction & Novels",
+  "history" => "History",
+  "science" => "Science & Math",
+  "mystery" => "Mystery",
+  "fantasy" => "Fantasy",
+  "technology" => "Programming & Tech",
+  "art" => "Art & Design"
+}
+
+category_records = {}
+category_mapping.values.uniq.each do |cat_name|
+  category_records[cat_name] = Category.create!(name: cat_name)
+end
 
 puts "Fetching books from Open Library API..."
 
-queries = ["programming", "fiction", "history", "science", "mystery", "fantasy", "technology", "art"]
+category_mapping.each do |query, cat_name|
+  category = category_records[cat_name]
 
-queries.each do |query|
-  url = URI("https://openlibrary.org/search.json?q=#{URI.encode_www_form_component(query)}&limit=40")
+  url = URI("https://openlibrary.org/search.json?q=#{URI.encode_www_form_component(query)}&limit=25")
   response = Net::HTTP.get(url)
-  data = JSON.parse(response)
+  data = JSON.parse(response) rescue {}
+
+  next unless data['docs'].present?
 
   data['docs'].each do |doc|
     next unless doc['title'].present? && doc['author_name'].present?
@@ -31,8 +53,9 @@ queries.each do |query|
       b.price = rand(15.0..50.0).round(2)
       b.published_year = doc['first_publish_year'] || 2000
       b.author = author
+      b.category = category
     end
   end
 end
 
-puts "Seeding complete! Created #{Author.count} authors and #{Book.count} books."
+puts "Seeding complete! Created #{Category.count} categories, #{Author.count} authors, and #{Book.count} books."

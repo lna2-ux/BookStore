@@ -5,3 +5,8 @@ class Book < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :published_year, presence: true, numericality: { only_integer: true }
 end
+# app/models/book.rb
+class Book < ApplicationRecord
+  belongs_to :author
+  belongs_to :category, optional: true
+end

@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
-  root 'books#index' # Points the homepage directly to your books index
+  # Define the root path ("/")
+  root 'books#index'
+
+  # Routes for Books (index and show)
   resources :books, only: [:index, :show]
+
+  # Routes for Authors (index and show)
   resources :authors, only: [:index, :show]
-  get 'about', to: 'pages#about'
+
+  # Route for the About page containing the ERD diagram and statistics
+  get 'about', to: 'about#index'
 end
